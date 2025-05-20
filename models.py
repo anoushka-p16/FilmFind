@@ -1,0 +1,56 @@
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
+
+# MovieModel class to represent a movie in the DB
+# Includes its poster link, title, year, rating, runtime, genre, summary, director, and actors
+class MovieModel(db.Model):
+    __tablename__ = 'movies'
+
+    id = db.Column(db.Integer, primary_key=True)
+    poster = db.Column(db.String(255))
+    title = db.Column(db.String(100), nullable=False)
+    year = db.Column(db.Integer)
+    rating = db.Column(db.String(10))
+    runtime = db.Column(db.Integer)
+    genre = db.Column(db.String(80))
+    summary = db.Column(db.Text)
+    director = db.Column(db.String(80))
+    actors = db.Column(db.JSON)
+
+    likes = db.Column(db.Integer, default=0)
+    dislikes = db.Column(db.Integer, default=0)
+    average_rating = db.Column(db.Float, default=0.0)
+    rating_count = db.Column(db.Integer, default=0)
+    in_my_list = db.Column(db.Boolean, default=False)
+
+    def __init__(self, poster, title, year, rating, runtime, genre, summary, director, actors):
+        self.poster = poster
+        self.title = title
+        self.year = year
+        self.rating = rating
+        self.runtime = runtime
+        self.genre = genre
+        self.summary = summary
+        self.director = director
+        self.actors = actors
+
+    # JSON representation of the MovieModel
+    def json(self):
+        return {
+            'id': self.id,
+            'poster':self.poster,
+            'title': self.title,
+            'year': self.year,
+            'rating': self.rating,
+            'runtime': self.runtime,
+            'genre': self.genre,
+            'summary': self.summary,
+            'director': self.director,
+            'actors': self.actors,
+            'likes': self.likes,
+            'dislikes': self.dislikes,
+            'average_rating': self.average_rating,
+            'rating_count': self.rating_count,
+            'in_my_list': self.in_my_list
+        }
