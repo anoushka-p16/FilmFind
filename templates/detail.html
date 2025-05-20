@@ -1,36 +1,37 @@
 {% extends "base.html" %}
+{% block title %}Details | Filmy{% endblock %}
 {% block content %}
-<a href="{{ url_for('home') }}" class="btn btn-secondary mb-3">← All Movies</a>
+<a href="{{ url_for('view_all_movies') }}" class="btn btn-light mb-4">← Back to All Movies</a>
 <div class="row">
   <div class="col-md-4">
-    <img src="{{ movie.poster }}" class="img-fluid rounded">
+    <img src="{{ movie.poster }}" class="img-fluid rounded shadow-sm" alt="Poster">
   </div>
   <div class="col-md-8">
-    <h2>{{ movie.title }} <small>({{ movie.year }})</small></h2>
+    <h2 class="mb-1">{{ movie.title }}</h2>
+    <p class="text-muted">{{ movie.year }}</p>
     <p><strong>Genre:</strong> {{ movie.genre }}</p>
-    <p><strong>Rating:</strong> {{ movie.rating }}</p>
-    <p><strong>Runtime:</strong> {{ movie.runtime }} min</p>
     <p><strong>Director:</strong> {{ movie.director }}</p>
+    <p><strong>Runtime:</strong> {{ movie.runtime }} min</p>
     <p><strong>Stars:</strong> {{ movie.actors | join(', ') }}</p>
     <p><strong>Summary:</strong> {{ movie.summary }}</p>
     <p><strong>Likes:</strong> {{ movie.likes }} | <strong>Dislikes:</strong> {{ movie.dislikes }}</p>
     <p><strong>Avg Rating:</strong> {{ movie.average_rating | round(1) }} ({{ movie.rating_count }} votes)</p>
 
     <form action="{{ url_for('add_to_my_list', movie_id=movie.id) }}" method="POST" class="mb-2">
-      <button class="btn btn-primary">Add to My List</button>
+      <button class="btn btn-outline-primary">Add to My List</button>
     </form>
 
     <form action="{{ url_for('like_movie', movie_id=movie.id) }}" method="POST" class="d-inline">
-      <button class="btn btn-success">👍 Like</button>
+      <button class="btn btn-success">Like</button>
     </form>
     <form action="{{ url_for('dislike_movie', movie_id=movie.id) }}" method="POST" class="d-inline">
-      <button class="btn btn-danger">👎 Dislike</button>
+      <button class="btn btn-danger">Dislike</button>
     </form>
 
     <form action="{{ url_for('rate_movie', movie_id=movie.id) }}" method="POST" class="mt-3">
-      <label>Rate this movie (1-5):</label>
-      <input type="number" name="rating" min="1" max="5">
-      <button class="btn btn-warning">Submit Rating</button>
+      <label for="rating">Rate this movie (1-5):</label>
+      <input type="number" name="rating" min="1" max="5" class="form-control w-25 d-inline" id="rating">
+      <button class="btn btn-warning mt-2">Submit Rating</button>
     </form>
   </div>
 </div>

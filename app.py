@@ -1,23 +1,46 @@
+# Imports and setup
 from flask import Flask, request, jsonify, abort, render_template, url_for, redirect
 from models import db, MovieModel
 
+# Create Flask app, configure SQLite DB, connect SQLALchemy
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///movies.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
-# The HTML Views ----------------
+# The HTML Views ____________________________________________________________
 @app.route('/')
-def home():
+def home_redirect():
+    return render_template('main.html')
+
+@app.route('/main')
+def view_main_page():
+    return redirect(url_for('view_main_page'))
+
+# Fetching all movies from DB and passing to the index.html template
+@app.route('/movies')
+def view_all_movies():
     movies = MovieModel.query.order_by(MovieModel.id.asc()).all()
     return render_template('index.html', movies=movies)
 
+# Only display movies that are in user's list
+@app.route('/my-list')
+def my_list():
+    movies = MovieModel.query.filter_by(in_my_list=True).order_by(MovieModel.id.asc()).all()
+    return render_template('myList.html', movies=movies)
+
+# Loads page for single movie, sends 404 error if not found
 @app.route('/movies/<int:movie_id>')
 def movie_detail(movie_id):
     movie = MovieModel.query.get_or_404(movie_id)
     return render_template('detail.html', movie=movie)
 
-# The API ----------------------
+# Login page
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+# The API ___________________________________________________________________
 
 # POST to my list
 @app.route('/movies/<int:movie_id>/like', methods=['POST'])
