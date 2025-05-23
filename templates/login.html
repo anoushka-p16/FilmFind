@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+  <div style="display: flex; gap: 3rem; flex-wrap: wrap; justify-content: center; margin-top: 2rem;">
+    
+    <!-- Login Form -->
+    <div style="flex: 1 1 300px; max-width: 400px;">
+      <h2 style="color: #b36b9d;">Login</h2>
+      <form method="post" action="/login">
+        <label>Email:</label><br>
+        <input type="email" name="email" required><br><br>
+
+        <label>Password:</label><br>
+        <input type="password" name="password" required><br><br>
+
+        <button type="submit">Login</button>
+      </form>
+    </div>
+
+    <!-- Sign Up Form -->
+    <div style="flex: 1 1 300px; max-width: 400px;">
+      <h2 style="color: #b36b9d;">Sign Up</h2>
+      <form method="post" action="/signup">
+        <label>Email:</label><br>
+        <input type="email" name="email" required><br><br>
+
+        <label>Password:</label><br>
+        <input type="password" name="password" required><br><br>
+
+        <label>Confirm Password:</label><br>
+        <input type="password" name="confirm_password" required><br><br>
+
+        <button type="submit">Sign Up</button>
+      </form>
+    </div>
+
+  </div>
+{% endblock %}

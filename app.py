@@ -1,5 +1,6 @@
 # Imports and setup
 from flask import Flask, request, jsonify, abort, render_template, url_for, redirect
+from sqlalchemy import or_
 from models import db, MovieModel
 
 # Create Flask app, configure SQLite DB, connect SQLALchemy
@@ -9,19 +10,73 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
 # The HTML Views ____________________________________________________________
+# Main and Landing page - main.html
 @app.route('/')
 def home_redirect():
     return render_template('main.html')
 
-@app.route('/main')
-def view_main_page():
-    return redirect(url_for('view_main_page'))
-
 # Fetching all movies from DB and passing to the index.html template
 @app.route('/movies')
 def view_all_movies():
-    movies = MovieModel.query.order_by(MovieModel.id.asc()).all()
-    return render_template('index.html', movies=movies)
+    q = MovieModel.query
+
+    search = request.args.get('search')
+    genre = request.args.get('genre')
+    director = request.args.get('director')
+    year = request.args.get('year')
+
+    if search:
+        q = q.filter(MovieModel.title.ilike(f"%{search}%"))
+    if genre:
+        q = q.filter(MovieModel.genre.ilike(f"%{genre}%"))
+    if director:
+        q = q.filter(MovieModel.director == director)
+    if year:
+        q = q.filter(MovieModel.year == int(year))
+
+    movies = q.order_by(MovieModel.id.asc()).all()
+
+    # Build genre dropdown with individual items
+    raw_genres = db.session.query(MovieModel.genre).filter(MovieModel.genre != None).all()
+    genre_set = set()
+    for row in raw_genres:
+        split_genres = [g.strip() for g in row[0].split(',')]
+        genre_set.update(split_genres)
+    genres = sorted(genre_set)
+
+    # Same for director and year
+    directors = [row[0] for row in db.session.query(MovieModel.director).distinct().order_by(MovieModel.director).all()]
+    years = [row[0] for row in db.session.query(MovieModel.year).distinct().order_by(MovieModel.year).all()]
+
+    return render_template("index.html", movies=movies, genres=genres, directors=directors, years=years)
+
+@app.route('/filter-movies')
+def filter_movies():
+    q = MovieModel.query
+
+    search = request.args.get('search')
+    genre = request.args.get('genre')
+    director = request.args.get('director')
+    year = request.args.get('year')
+
+    if search:
+        q = q.filter(MovieModel.title.ilike(f"%{search}%"))
+    if genre:
+        q = q.filter(MovieModel.genre.ilike(f"%{genre}%"))
+    if director:
+        q = q.filter(MovieModel.director == director)
+    if year:
+        q = q.filter(MovieModel.year == int(year))
+
+    movies = q.order_by(MovieModel.id.asc()).all()
+    return render_template('_movie_cards.html', movies=movies)
+
+@app.route('/movies/<int:movie_id>/remove_from_list', methods=['POST'])
+def remove_from_my_list(movie_id):
+    movie = MovieModel.query.get_or_404(movie_id)
+    movie.in_my_list = False
+    db.session.commit()
+    return redirect(url_for('my_list'))
 
 # Only display movies that are in user's list
 @app.route('/my-list')
@@ -43,30 +98,6 @@ def login():
 # The API ___________________________________________________________________
 
 # POST to my list
-@app.route('/movies/<int:movie_id>/like', methods=['POST'])
-def like_movie(movie_id):
-    movie = MovieModel.query.get_or_404(movie_id)
-    movie.likes += 1
-    db.session.commit()
-    return redirect(url_for('movie_detail', movie_id=movie_id))
-
-@app.route('/movies/<int:movie_id>/dislike', methods=['POST'])
-def dislike_movie(movie_id):
-    movie = MovieModel.query.get_or_404(movie_id)
-    movie.dislikes += 1
-    db.session.commit()
-    return redirect(url_for('movie_detail', movie_id=movie_id))
-
-@app.route('/movies/<int:movie_id>/rate', methods=['POST'])
-def rate_movie(movie_id):
-    rating = int(request.form['rating'])
-    movie = MovieModel.query.get_or_404(movie_id)
-    if 1 <= rating <= 5:
-        movie.average_rating = ((movie.average_rating * movie.rating_count) + rating) / (movie.rating_count + 1)
-        movie.rating_count += 1
-        db.session.commit()
-    return redirect(url_for('movie_detail', movie_id=movie_id))
-
 @app.route('/movies/<int:movie_id>/add_to_list', methods=['POST'])
 def add_to_my_list(movie_id):
     movie = MovieModel.query.get_or_404(movie_id)

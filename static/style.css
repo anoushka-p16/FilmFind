@@ -1,0 +1,235 @@
+:root {
+    --bg: #fefbf5;
+    --text-dark: #444;
+    --text-light: #777;
+    --primary: #f9ccd3; /* pastel pink */
+    --primary-hover: #f7b3c0;
+    --shadow: rgba(0, 0, 0, 0.08);
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text-dark);
+    margin: 0;
+    padding: 0;
+}
+
+/* Tabs header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 1px 40px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Top left corner logo */
+header h1 a {
+    text-decoration: none;
+    color: var(--text-dark);
+    font-size: 30px;
+}
+
+/* Top right corner tabs */
+nav a {
+    margin-left: 45px;
+    text-decoration: none;
+    font-weight: 600;
+    color: var(--text-light);
+    font-size: 24px;
+}
+
+nav a:hover {
+    color: var(--primary-hover);
+}
+
+main {
+    padding: 40px;
+}
+
+/* Landing */
+.landing-container {
+    text-align: center;
+    padding: 70px 20px;
+}
+
+.landing-icon {
+    width: 210px;
+    margin: 0;
+    padding: 0;
+}
+
+.landing-title {
+    font-size: 70px;
+    margin: 0;
+    padding: 0;
+    line-height: 0.5;
+}
+
+.landing-sub {
+    font-size: 20px;
+    color: var(--text-light);
+    margin-bottom: 30px;
+    margin-top: 30px;
+}
+
+.cta-button {
+    background-color: var(--primary);
+    color: #333;
+    font-weight: bold;
+    padding: 12px 28px;
+    border-radius: 14px;
+    text-decoration: none;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    box-shadow: 0 4px 10px var(--shadow);
+}
+
+.cta-button:hover {
+    background-color: var(--primary-hover);
+}
+
+/* Filter bar */
+.filter-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 30px;
+    justify-content: center;
+}
+
+.filter-form input {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    background-color: white; /* Match the input's background */
+    color: #444; /* Match text color */
+    font-family: 'Inter', sans-serif;
+}
+
+.filter-form input::placeholder {
+    color: #444; /* Or var(--text-dark) to match your theme */
+    opacity: 1;  /* Removes the default "faded" look */
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+}
+
+.filter-form select {
+    padding: 5px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    background-color: white; /* Match the input's background */
+    color: #444; /* Match text color */
+    font-family: 'Inter', sans-serif;
+}
+
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+}
+
+.movie-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 380px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+/* Fixed image height */
+.poster-container {
+    height: 230px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.poster-container img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* Title starts at fixed spacing below image */
+.title-container {
+    margin-top: 10px; /* fixed gap from poster */
+    min-height: 45px; /* reserve space if needed */
+}
+
+.movie-card a {
+    text-decoration: none;
+    color: #444;
+}
+
+.movie-card a h3 {
+    font-size: 15px;
+    line-height: 1.2;
+    margin: 0;
+    text-align: center;
+    text-decoration: underline;
+    color: #444;
+}
+
+/* Genre at bottom */
+.movie-card .movie-genre {
+    font-size: 14px;
+    color: var(--text-light);
+    text-align: center;
+    margin-top: auto;
+    padding-top: 6px;
+}
+
+/* Detail Page */
+.detail-container {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.detail-poster {
+    width: 300px;
+    border-radius: 14px;
+    box-shadow: 0 4px 16px var(--shadow);
+}
+
+.detail-info {
+    max-width: 600px;
+}
+
+/* My List */
+.remove-btn {
+    background-color: #ffcccc;
+    color: #333;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.remove-btn:hover {
+    background-color: #fba8a8;
+}
+
+.empty-msg {
+    text-align: center;
+    font-size: 18px;
+    color: var(--text-light);
+}
+
+.all-movies-title {
+    font-size: 35px;
+    margin-top: 5px;
+    text-align:center;
+}

@@ -18,10 +18,6 @@ class MovieModel(db.Model):
     director = db.Column(db.String(80))
     actors = db.Column(db.JSON)
 
-    likes = db.Column(db.Integer, default=0)
-    dislikes = db.Column(db.Integer, default=0)
-    average_rating = db.Column(db.Float, default=0.0)
-    rating_count = db.Column(db.Integer, default=0)
     in_my_list = db.Column(db.Boolean, default=False)
 
     def __init__(self, poster, title, year, rating, runtime, genre, summary, director, actors):
@@ -48,9 +44,5 @@ class MovieModel(db.Model):
             'summary': self.summary,
             'director': self.director,
             'actors': self.actors,
-            'likes': self.likes,
-            'dislikes': self.dislikes,
-            'average_rating': self.average_rating,
-            'rating_count': self.rating_count,
             'in_my_list': self.in_my_list
         }

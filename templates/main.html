@@ -1,10 +1,10 @@
-{% extends "base.html" %}
-{% block title %}Welcome | Filmy{% endblock %}
+{% extends 'base.html' %}
 
 {% block content %}
-<div class="text-center mt-5">
-  <h1 class="fw-bold">Welcome to Filmy</h1>
-  <p class="text-muted">Discover and save your favorite picks from IMDb’s Top 1000 movies & series.</p>
-  <a href="{{ url_for('view_all_movies') }}" class="btn btn-primary btn-lg mt-3">Start Exploring</a>
+<div class="landing-container">
+    <img src="{{ url_for('static', filename='popcorn.png') }}" alt="Popcorn and Reel" class="landing-icon">
+    <h2 class="landing-title">Welcome to Filmy</h2>
+    <p class="landing-sub">Discover your next favorite film from IMDB’s Top 1000</p>
+    <a class="cta-button" href="{{ url_for('view_all_movies') }}">Explore Now</a>
 </div>
 {% endblock %}

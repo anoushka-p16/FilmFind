@@ -1,20 +1,73 @@
-{% extends "base.html" %}
-{% block title %}All Movies | Filmy{% endblock %}
+{% extends 'base.html' %}
+
 {% block content %}
-<h2 class="mb-4">All Movies</h2>
-<table class="table table-hover bg-white rounded shadow-sm">
-  <thead class="table-light">
-    <tr><th>ID</th><th></th><th>Title</th><th>Year</th></tr>
-  </thead>
-  <tbody>
-    {% for m in movies %}
-    <tr onclick="location.href='{{ url_for('movie_detail', movie_id=m.id) }}'" style="cursor:pointer">
-      <td>{{ m.id }}</td>
-      <td><img src="{{ m.poster }}" height="80" class="rounded"></td>
-      <td>{{ m.title }}</td>
-      <td>{{ m.year }}</td>
-    </tr>
+<h2 class="all-movies-title">All Movies</h2>
+
+    <form method="GET" class="filter-form">
+        <input type="text" id="search-input" name="search" placeholder="Search by Title" value="{{ request.args.get('search', '') }}">
+        <select name="genre">
+            <option value="">All Genres</option>
+            {% for genre in genres %}
+                <option value="{{ genre }}" {% if request.args.get('genre') == genre %}selected{% endif %}>{{ genre }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="director">
+            <option value="">All Directors</option>
+            {% for director in directors %}
+                <option value="{{ director }}" {% if request.args.get('director') == director %}selected{% endif %}>{{ director }}</option>
+            {% endfor %}
+        </select>
+
+        <select name="year">
+            <option value="">All Years</option>
+            {% for year in years %}
+                <option value="{{ year }}" {% if request.args.get('year') == year %}selected{% endif %}>{{ year }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit" class="cta-button">Search</button>
+    </form>
+
+<div class="movie-grid" id="movie-grid">
+    {% for movie in movies %}
+        <div class="movie-card">
+            <img src="{{ movie.poster }}" alt="{{ movie.title }}">
+            <a href="{{ url_for('movie_detail', movie_id=movie.id) }}">
+                <h3>{{ movie.title }} ({{ movie.year }})</h3>
+            </a>
+            <p>{{ movie.genre }}</p>
+        </div>
     {% endfor %}
-  </tbody>
-</table>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById('search-input');
+    const genreSelect = document.querySelector('select[name="genre"]');
+    const directorSelect = document.querySelector('select[name="director"]');
+    const yearSelect = document.querySelector('select[name="year"]');
+    const movieGrid = document.getElementById('movie-grid');
+
+    function fetchFilteredMovies() {
+        const params = new URLSearchParams({
+            search: searchInput.value,
+            genre: genreSelect.value,
+            director: directorSelect.value,
+            year: yearSelect.value
+        });
+
+        fetch(`/filter-movies?${params.toString()}`)
+            .then(response => response.text())
+            .then(html => {
+                movieGrid.innerHTML = html;
+            });
+    }
+
+    // Event listeners
+    searchInput.addEventListener('input', fetchFilteredMovies);
+    genreSelect.addEventListener('change', fetchFilteredMovies);
+    directorSelect.addEventListener('change', fetchFilteredMovies);
+    yearSelect.addEventListener('change', fetchFilteredMovies);
+});
+</script>
 {% endblock %}
