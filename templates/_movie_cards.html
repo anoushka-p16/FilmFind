@@ -1,8 +1,13 @@
 {% for movie in movies %}
-    <div class="movie-card">
-        <img src="{{ movie.poster }}" alt="{{ movie.title }}">
-        <h3>{{ movie.title }} ({{ movie.year }})</h3>
-        <p>{{ movie.genre }}</p>
-        <a href="{{ url_for('movie_detail', movie_id=movie.id) }}">Details</a>
+  <div class="movie-card">
+    <div class="poster-container">
+      <img src="{{ movie.poster }}" alt="{{ movie.title }}">
     </div>
+
+    <div class="card-info">
+      <a href="{{ url_for('movie_detail', movie_id=movie.id) }}">
+        <h3>{{ movie.title }} ({{ movie.year }})</h3>
+      </a>
+    </div>
+  </div>
 {% endfor %}

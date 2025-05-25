@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="signup-page">
+    <div class="signup-container">
+      <div class="signup-form-wrapper">
+        <h2 class="signup-title">Join today!</h2>
+        <form method="post" action="/signup" class="signup-form">
+          {{ form.hidden_tag() }}
+
+          {{ form.username.label }}
+          {{ form.username }}
+
+          {{ form.password.label }}
+          {{ form.password }}
+
+          {{ form.submit }}
+
+          <p class="landing-sub">Already have an account?</p>
+          <a class="cta-button" href="{{ url_for('login', direct='true') }}">Sign in</a>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

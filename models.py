@@ -46,3 +46,13 @@ class MovieModel(db.Model):
             'actors': self.actors,
             'in_my_list': self.in_my_list
         }
+    
+class ReviewModel(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    movie_id = db.Column(db.Integer, db.ForeignKey('movies.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
+    text = db.Column(db.Text, nullable=False)
+
+    movie = db.relationship('MovieModel', backref='reviews')
+    user = db.relationship('User', backref='reviews')

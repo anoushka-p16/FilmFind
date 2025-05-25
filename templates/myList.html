@@ -1,21 +1,27 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>🎞️ My List</h2>
+<h2 class="all-movies-title">🎞️ My List</h2>
+
 {% if movies %}
 <div class="movie-grid">
-    {% for movie in movies %}
-        <div class="movie-card">
+  {% for movie in movies %}
+    <div class="movie-grid-item">
+      <div class="movie-card">
+        <a href="{{ url_for('movie_detail', movie_id=movie.id) }}">
+          <div class="poster-container">
             <img src="{{ movie.poster }}" alt="{{ movie.title }}">
-            <h3>{{ movie.title }} ({{ movie.year }})</h3>
-            <p>{{ movie.genre }}</p>
-            <form action="{{ url_for('remove_from_my_list', movie_id=movie.id) }}" method="POST">
-                <button class="remove-btn">Remove</button>
-            </form>
-        </div>
-    {% endfor %}
+          </div>
+          <h3>{{ movie.title }} ({{ movie.year }})</h3>
+        </a>
+      </div>
+      <form action="{{ url_for('remove_from_my_list', movie_id=movie.id) }}" method="POST" class="remove-form">
+        <button class="remove-btn">Remove From My List</button>
+      </form>
+    </div>
+  {% endfor %}
 </div>
 {% else %}
-<p class="empty-msg">No movies saved yet. Start adding your faves! 🍿</p>
+<p class="empty-msg">No movies saved yet. Start adding your favorites! 🍿</p>
 {% endif %}
 {% endblock %}

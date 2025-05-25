@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="dashboard-container">
+  <h2>👋 Welcome, {{ current_user.username }}!</h2>
+
+  <div class="dashboard-section">
+    <h3>🎞️ Your Saved Movies</h3>
+    <p>You have {{ saved_count }} movie{{ 's' if saved_count != 1 else '' }} in your list.</p>
+    <a href="{{ url_for('my_list') }}" class="cta-button">Go to My List</a>
+  </div>
+
+  <div class="dashboard-section">
+    <h3>⭐ Your Reviews</h3>
+    {% if reviews %}
+      <ul class="user-reviews-list">
+        {% for review in reviews %}
+          <li>
+            <strong>{{ review.movie.title }}</strong>: {{ review.rating }}/10 — "{{ review.text }}"
+            <!-- Optional edit/delete -->
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>You haven't submitted any reviews yet.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
